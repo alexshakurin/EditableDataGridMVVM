@@ -1,0 +1,5 @@
+Example of editable collection in DataGrid with MVVM pattern. 
+The following frameworks are used:
+1) MVVM Light
+2) EF code first
+3) AutoMapper
