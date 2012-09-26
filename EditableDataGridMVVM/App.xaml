@@ -1,0 +1,8 @@
+﻿<Application x:Class="EditableDataGridMVVM.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ViewModel="clr-namespace:EditableDataGridMVVM.ViewModel" StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         <ViewModel:ViewModelLocator x:Key="locator" />
+    </Application.Resources>
+</Application>
