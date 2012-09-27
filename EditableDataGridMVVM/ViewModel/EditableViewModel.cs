@@ -7,8 +7,10 @@ using GalaSoft.MvvmLight;
 
 namespace EditableDataGridMVVM.ViewModel
 {
-	public class EditableViewModel : ViewModelBase, IEditableObject, IDataErrorInfo
+	public class EditableViewModel : ViewModelBase, IDataErrorInfo
 	{
+		protected const string IsValidProperty = "IsValid";
+
 		private readonly Dictionary<string, string> errors;
 		private readonly ViewModelCacheHelper cacheHelper;
 
@@ -39,6 +41,7 @@ namespace EditableDataGridMVVM.ViewModel
 					return;
 				}
 
+				error = value;
 				RaisePropertyChanged(() => Error);
 			}
 		}
@@ -116,7 +119,7 @@ namespace EditableDataGridMVVM.ViewModel
 
 		private void ClearErrors()
 		{
-			var keys = errors.Keys;
+			var keys = errors.Keys.ToList();
 			foreach (var key in keys)
 			{
 				errors[key] = string.Empty;

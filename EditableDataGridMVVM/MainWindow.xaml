@@ -3,8 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525" DataContext="{Binding Main, Source={StaticResource locator}}">
     <Grid>
-        <DataGrid ItemsSource="{Binding Products}" AutoGenerateColumns="False" Name="dataGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="0 5 0 5">
+            <Button Command="{Binding SaveCommand}" HorizontalAlignment="Left" Width="100" Content="Save" />
+            <Button Command="{Binding NewItemCommand}" HorizontalAlignment="Left" Width="100" Content="New" Margin="5 0 0 0" />
+            <Button Command="{Binding CancelCommand}" HorizontalAlignment="Left" Width="100" Content="Cancel" Margin="5 0 0 0" />
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding Products}" AutoGenerateColumns="False" Name="dataGrid" Grid.Row="1">
             <DataGrid.Columns>
+                <DataGridTemplateColumn IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DeleteCommand}" Content="Delete">
+                                
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Code}" Header="Code" />
                 <DataGridTemplateColumn Header="Type">
                     <DataGridTemplateColumn.CellEditingTemplate>

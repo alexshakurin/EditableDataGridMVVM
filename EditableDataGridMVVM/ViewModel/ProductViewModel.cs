@@ -1,19 +1,37 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Windows.Input;
 using AutoMapper;
 using EditableDataGridMVVM.Attributes;
-using EditableDataGridMVVM.Database;
 using EditableDataGridMVVM.Model;
+using GalaSoft.MvvmLight.Command;
 
 namespace EditableDataGridMVVM.ViewModel
 {
 	public class ProductViewModel : EditableViewModel
 	{
-		private readonly Product product;
-		private readonly ApplicationDbContext dbContext;
+		public event EventHandler DeleteRequest;
+
+		public Product Product { get; private set; }
 
 		private string code;
 		private int type;
 		private int unit;
+
+		private ICommand deleteCommand;
+
+		public ICommand DeleteCommand
+		{
+			get
+			{
+				if (deleteCommand == null)
+				{
+					deleteCommand = new RelayCommand(Delete);
+				}
+
+				return deleteCommand;
+			}
+		}
 
 		[CacheProperty]
 		[Required]
@@ -74,10 +92,9 @@ namespace EditableDataGridMVVM.ViewModel
 			}
 		}
 
-		public ProductViewModel(Product product, ApplicationDbContext dbContext)
+		public ProductViewModel(Product product)
 		{
-			this.product = product;
-			this.dbContext = dbContext;
+			Product = product;
 
 			LoadProduct();
 		}
@@ -88,7 +105,6 @@ namespace EditableDataGridMVVM.ViewModel
 			if (IsValid)
 			{
 				UpdateProduct();
-				dbContext.SaveChanges();
 			}
 		}
 
@@ -98,14 +114,28 @@ namespace EditableDataGridMVVM.ViewModel
 			// TODO: add custom validate logic here
 		}
 
+		private void Delete()
+		{
+			OnDeleteRequest(EventArgs.Empty);
+		}
+
+		private void OnDeleteRequest(EventArgs args)
+		{
+			var local = DeleteRequest;
+			if (local != null)
+			{
+				local(this, args);
+			}
+		}
+
 		private void LoadProduct()
 		{
-			Mapper.Map(product, this);
+			Mapper.Map(Product, this);
 		}
 
 		private void UpdateProduct()
 		{
-			Mapper.DynamicMap<ProductViewModel, Product>(this, product);
+			Mapper.DynamicMap<ProductViewModel, Product>(this, Product);
 		}
 	}
 }
